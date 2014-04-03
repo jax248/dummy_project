@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Reset Password</title>
+<meta charset="UTF-8" />
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<link rel="stylesheet" type="text/css" href="css/structure.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script src="js/jquery.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script>
+$(document).ready(function() {
+    
+    $body = $("body");
+
+    $(document).on({
+        ajaxStart: function() { $body.addClass("loading");    },
+        ajaxStop: function() { $body.removeClass("loading"); }    
+    });
+
+	$('#loginBtn').click(function() {
+		window.location.href='login.html';
+    });
+    
+    $("#resetForm").validate();
+	
+	// Attach a submit handler to the form
+	$( "#resetForm" ).submit(function( event ) {
+ 
+		// Stop form from submitting normally
+		event.preventDefault();
+ 
+        if($("#resetForm").valid()){
+		       // Get some values from elements on the page:
+		    var $form = $( this ),
+					term = $form.find( "input[name='email_id']" ).val(),
+					url = $form.attr( "action" );
+		    // Send the data using post
+		    var posting = $.post(url, $( "#resetForm" ).serialize());
+ 
+		    // Put the results in a div
+		    posting.done(function( data ) {
+			    $("#errorMsg").text(data);
+			    //alert(data);
+		    });
+        }
+	});
+});
+</script>
+</head>
+<body>
+<form class="box login" id="resetForm" action="http://bluntingthorns.com/pracify/PHPScripts/resetpwd.php">
+	<fieldset class="boxBody">
+	  <label>Email ID</label>
+	  <input type="email" name="email_id" tabindex="1" placeholder="your@email.id" minlength="6" required>
+	  <label id="errorMsg" class="errorMsg"></label>
+	</fieldset>
+	<footer>
+	  <input type="button" class="btnRegister" id="loginBtn" value="Login" tabindex="3">
+	  <input type="submit" class="btnLogin" id="resetBtn" value="Submit" tabindex="2">
+	</footer>
+</form>
+<div class="modal"><!-- Place at bottom of page --></div>
+</body>
+</html>
