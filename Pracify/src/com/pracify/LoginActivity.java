@@ -27,20 +27,6 @@ public class LoginActivity extends ActionBarActivity {
 				this);
 		Login loginJS = new Login(this);
 
-		// Log.d("LoginActivity: ", "Inserting ..");
-		// userDetailsTableHandler.addUserDetails(new
-		// UserDetails("ankur3.k@tcs.com", "Ankur Nishad", 0));
-
-		// Log.d("LoginActivity: ", "Reading all user details..");
-		// UserDetails userDetails =
-		// userDetailsTableHandler.getUserDetails("ankur3.k@tcs.com");
-
-		// String log = "Email Id: " + userDetails.getEmail_id() +
-		// " , User Name: " + userDetails.getUser_name() + " , IsLoggedIn: " +
-		// userDetails.getIs_logged_in();
-		// Writing Contacts to log
-		// Log.d("LoginActivity: ", log);
-
 		if (userDetailsTableHandler.isUserLoggedIn()) {
 
 			Intent intent = new Intent(this, HomeActivity.class);
@@ -62,6 +48,11 @@ public class LoginActivity extends ActionBarActivity {
 		// Force links and redirects to open in the WebView instead of in a
 		// browser
 		mWebView.setWebViewClient(new MyAppWebViewClient());
+	}
+
+	public void showHTMLError(String msg) {
+
+		mWebView.loadUrl("javascript:showErrorMsg(" + msg + ")");
 	}
 
 	// Detect when the back button is pressed

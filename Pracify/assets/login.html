@@ -34,14 +34,17 @@ $(document).ready(function() {
 					email_id = $form.find( "input[name='email_id']" ).val(),
 					password = $form.find( "input[name='password']" ).val();
 		    
-			data = Login.performLogin(email_id, password);
-			
-			$("#errorMsg").text(data);
-			
-			$body.removeClass("loading");
+			Login.performLogin(email_id, password);
         }
 	});
 });
+
+function showErrorMsg(data){
+
+	$("#errorMsg").text(data);
+			
+	$body.removeClass("loading");
+}
 </script>
 </head>
 <body>
