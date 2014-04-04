@@ -3,6 +3,7 @@ package com.pracify;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -52,7 +53,10 @@ public class LoginActivity extends ActionBarActivity {
 
 	public void showHTMLError(String msg) {
 
-		mWebView.loadUrl("javascript:showErrorMsg(" + msg + ")");
+		String javaScript = "javascript:showErrorMsg('" + msg + "')";
+
+		Log.d("LoginActivity", javaScript);
+		mWebView.loadUrl(javaScript);
 	}
 
 	// Detect when the back button is pressed
