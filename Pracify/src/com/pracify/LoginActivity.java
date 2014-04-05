@@ -73,17 +73,6 @@ public class LoginActivity extends ActionBarActivity {
 		mWebView.loadUrl("file:///android_asset/login.html");
 	}
 
-	// Detect when the back button is pressed
-	@Override
-	public void onBackPressed() {
-		if (mWebView.canGoBack()) {
-			mWebView.goBack();
-		} else {
-			// Let the system handle the back button
-			super.onBackPressed();
-		}
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
