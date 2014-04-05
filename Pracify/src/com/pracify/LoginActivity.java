@@ -9,9 +9,11 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.pracify.db.UserDetailsTableHandler;
 import com.pracify.js.Login;
+import com.pracify.js.Register;
 import com.pracify.util.MyAppWebViewClient;
 
 public class LoginActivity extends ActionBarActivity {
@@ -27,6 +29,7 @@ public class LoginActivity extends ActionBarActivity {
 		UserDetailsTableHandler userDetailsTableHandler = new UserDetailsTableHandler(
 				this);
 		Login loginJS = new Login(this);
+		Register registerJS = new Register(this);
 
 		if (userDetailsTableHandler.isUserLoggedIn()) {
 
@@ -39,6 +42,7 @@ public class LoginActivity extends ActionBarActivity {
 		mWebView = (WebView) findViewById(R.id.activity_main_webview);
 
 		mWebView.addJavascriptInterface(loginJS, "Login");
+		mWebView.addJavascriptInterface(registerJS, "Register");
 
 		mWebView.loadUrl("file:///android_asset/login.html");
 
@@ -54,6 +58,18 @@ public class LoginActivity extends ActionBarActivity {
 	public void showHTMLError(String msg) {
 
 		String javaScript = "javascript:showErrorMsg('" + msg + "')";
+
+		Log.d("LoginActivity", javaScript);
+		mWebView.loadUrl(javaScript);
+	}
+
+	public void registerSuccess() {
+
+		Toast.makeText(getApplicationContext(),
+				"Registered! Please check your mail to proceed.",
+				Toast.LENGTH_LONG).show();
+
+		String javaScript = "javascript:registerSuccess()";
 
 		Log.d("LoginActivity", javaScript);
 		mWebView.loadUrl(javaScript);
