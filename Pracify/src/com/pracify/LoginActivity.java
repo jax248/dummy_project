@@ -70,7 +70,7 @@ public class LoginActivity extends ActionBarActivity {
 				Toast.LENGTH_LONG).show();
 
 		Log.d("LoginActivity", "Going back to login");
-		mWebView.loadUrl("register.html");
+		mWebView.loadUrl("file:///android_asset/login.html");
 	}
 
 	// Detect when the back button is pressed
