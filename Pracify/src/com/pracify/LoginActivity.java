@@ -69,10 +69,8 @@ public class LoginActivity extends ActionBarActivity {
 				"Registered! Please check your mail to proceed.",
 				Toast.LENGTH_LONG).show();
 
-		String javaScript = "javascript:registerSuccess()";
-
-		Log.d("LoginActivity", javaScript);
-		mWebView.loadUrl(javaScript);
+		Log.d("LoginActivity", "Going back to login");
+		mWebView.loadUrl("register.html");
 	}
 
 	// Detect when the back button is pressed
