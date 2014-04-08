@@ -1,27 +1,36 @@
 package com.pracify;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+import android.view.Window;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+
+import com.pracify.util.MyAppWebViewClient;
 
 public class HomeActivity extends ActionBarActivity {
+
+	private WebView mWebView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_home);
 
-		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
+		mWebView = (WebView) findViewById(R.id.activity_home_webview);
+
+		mWebView.loadUrl("file:///android_asset/home.html");
+
+		// Enable Javascript
+		WebSettings webSettings = mWebView.getSettings();
+		webSettings.setJavaScriptEnabled(true);
+
+		// Force links and redirects to open in the WebView instead of in a
+		// browser
+		mWebView.setWebViewClient(new MyAppWebViewClient());
 	}
 
 	@Override
@@ -43,22 +52,4 @@ public class HomeActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_home, container,
-					false);
-			return rootView;
-		}
-	}
-
 }

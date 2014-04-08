@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Pracify</title>
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/component.css" />
+		<!--[if IE]>
+  		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<script>
+			function recordAudio(){
+				alert("Record Audio");
+			}
+			
+			function pauseRecording(){
+				alert("Pause Recording");
+			}
+			
+			function stopRecording(){
+				alert("Stop Recording");
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div id="tabs" class="tabs">
+				<nav>
+					<ul>
+						<li><a href="#section-1" class="icon-shop"><span>Record</span></a></li>
+						<li><a href="#section-2" class="icon-cup"><span>History</span></a></li>
+						<li><a href="#section-3" class="icon-lab"><span>Settings</span></a></li>
+					</ul>
+				</nav>
+				<div class="content">
+					<section id="section-1">
+						<div class="mediabox">
+							<center>
+								<input type="button" name="record" value="Record" onclick="recordAudio();"/><br/>
+								<input type="button" name="pause" value="Pause" onclick="pauseRecording();"/><br/>
+								<input type="button" name="stop" value="Stop" onclick="stopRecording();"/>
+							</center>
+						</div>
+					</section>
+					<section id="section-2">
+						<div class="mediabox">
+							<center>
+								<h3>Recording History</h3>
+							</center>
+						</div>
+					</section>
+					<section id="section-3">
+						<div class="mediabox">
+							<center>
+								<h3>Some Settings</h3>
+							</center>
+						</div>
+					</section>
+				</div><!-- /content -->
+			</div><!-- /tabs -->
+		</div>
+		<script src="js/cbpFWTabs.js"></script>
+		<script>
+			new CBPFWTabs( document.getElementById( 'tabs' ) );
+		</script>
+	</body>
+</html>

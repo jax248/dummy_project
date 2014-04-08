@@ -14,6 +14,8 @@ import android.webkit.JavascriptInterface;
 
 import com.pracify.HomeActivity;
 import com.pracify.LoginActivity;
+import com.pracify.db.UserDetailsTableHandler;
+import com.pracify.db.tableClasses.UserDetails;
 import com.pracify.network.AsyncJSONParser;
 import com.pracify.network.AsyncTaskCompleteListener;
 import com.pracify.util.PracifyConstants;
@@ -65,6 +67,16 @@ public class Login implements AsyncTaskCompleteListener<JSONObject> {
 			if (json.getBoolean("login")) {
 
 				Log.d("Login", "Valid login. Starting new activity");
+
+				UserDetailsTableHandler userDetailsTableHandler = new UserDetailsTableHandler(
+						activity);
+
+				UserDetails userDetails = new UserDetails(
+						json.getString("email_id"),
+						json.getString("user_name"), 1);
+
+				userDetailsTableHandler.deleteAllDetails();
+				userDetailsTableHandler.addUserDetails(userDetails);
 
 				Intent intent = new Intent(activity, HomeActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
