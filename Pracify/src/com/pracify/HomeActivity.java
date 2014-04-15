@@ -8,6 +8,7 @@ import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.pracify.js.RecordAudio;
 import com.pracify.util.MyAppWebViewClient;
 
 public class HomeActivity extends ActionBarActivity {
@@ -23,6 +24,9 @@ public class HomeActivity extends ActionBarActivity {
 		mWebView = (WebView) findViewById(R.id.activity_home_webview);
 
 		mWebView.loadUrl("file:///android_asset/home.html");
+
+		RecordAudio recordAudioJS = new RecordAudio(this);
+		mWebView.addJavascriptInterface(recordAudioJS, "RA");
 
 		// Enable Javascript
 		WebSettings webSettings = mWebView.getSettings();

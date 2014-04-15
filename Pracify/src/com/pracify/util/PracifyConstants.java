@@ -10,7 +10,12 @@ public class PracifyConstants {
 
 	public static String loginURL = basURL + "/login.php";
 	public static String registerURL = basURL + "/register.php";
-	
-	public static String externalStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pracify";
+
+	public static String recordingPath = "/Pracify";
+	public static String externalStoragePath = Environment
+			.getExternalStorageDirectory().getAbsolutePath() + recordingPath;
+	public static boolean isSDPresent = android.os.Environment
+			.getExternalStorageState().equals(
+					android.os.Environment.MEDIA_MOUNTED);
 
 }
