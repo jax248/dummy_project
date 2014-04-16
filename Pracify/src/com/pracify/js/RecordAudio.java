@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -19,6 +20,7 @@ public class RecordAudio {
 	private ActionBarActivity activity;
 
 	private MediaRecorder mRecorder = null;
+	private MediaPlayer mPlayer = null;
 
 	public RecordAudio(ActionBarActivity activity) {
 
@@ -45,6 +47,27 @@ public class RecordAudio {
 	}
 
 	@JavascriptInterface
+	public void startPlaying() {
+		mPlayer = new MediaPlayer();
+		try {
+			mPlayer.setDataSource(mFileName);
+			mPlayer.prepare();
+			mPlayer.start();
+			CommonHelpers.showLongToast(activity, "Playing Started");
+		} catch (Exception e) {
+			Log.e(LOG_TAG, e.getMessage());
+			CommonHelpers.showLongToast(activity, "Error Playing");
+		}
+	}
+
+	@JavascriptInterface
+	public void stopPlaying() {
+		mPlayer.release();
+		mPlayer = null;
+		CommonHelpers.showLongToast(activity, "Playing Stopped");
+	}
+
+	@JavascriptInterface
 	public void startRecording() {
 		mRecorder = new MediaRecorder();
 		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -54,8 +77,8 @@ public class RecordAudio {
 
 		try {
 			mRecorder.prepare();
-			CommonHelpers.showLongToast(activity, "Recording Started");
 			mRecorder.start();
+			CommonHelpers.showLongToast(activity, "Recording Started");
 		} catch (Exception e) {
 			CommonHelpers.showLongToast(activity, "Error!! Try again later.");
 			Log.e(LOG_TAG, "prepare() failed : " + e.getMessage());
