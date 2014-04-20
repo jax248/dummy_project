@@ -2,7 +2,9 @@ package com.pracify.js;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 import com.pracify.util.CommonHelpers;
+import com.pracify.util.FileExtensionFilter;
 import com.pracify.util.PracifyConstants;
 
 public class RecordAudio {
@@ -28,7 +31,14 @@ public class RecordAudio {
 		String dateInString = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")
 				.format(new Date()).toString();
 
-		String fileName = "Pracify_" + dateInString + " record.3gp";
+		String fileName = dateInString + ".3gp";
+		String outputDir = getOutputDir();
+		mFileName = outputDir + "/" + fileName;
+
+		Log.d(LOG_TAG, "File Path : " + mFileName);
+	}
+
+	private String getOutputDir() {
 		String outputDir;
 		File file;
 		if (PracifyConstants.isSDPresent) {
@@ -39,11 +49,9 @@ public class RecordAudio {
 					PracifyConstants.recordingPath);
 			outputDir = file.getAbsolutePath();
 		}
-
 		file.mkdirs();
-		mFileName = outputDir + "/" + fileName;
 
-		Log.d(LOG_TAG, "File Path : " + mFileName);
+		return outputDir;
 	}
 
 	@JavascriptInterface
@@ -91,5 +99,40 @@ public class RecordAudio {
 		mRecorder.release();
 		mRecorder = null;
 		CommonHelpers.showLongToast(activity, "Recording Stopped");
+	}
+
+	@JavascriptInterface
+	public void listFiles() {
+		CommonHelpers.showLongToast(activity, "Getting Files");
+		ArrayList<HashMap<String, String>> songsList = getPlayList();
+		for (int i = 0; i < songsList.size(); i++) {
+			Log.d("Music File", songsList.get(i).get("fileTitle"));
+		}
+	}
+
+	/**
+	 * Function to read all mp3 files from sdcard and store the details in
+	 * ArrayList
+	 * */
+	private ArrayList<HashMap<String, String>> getPlayList() {
+		String outputDir = getOutputDir();
+		File home = new File(outputDir);
+
+		ArrayList<HashMap<String, String>> songsList = new ArrayList<HashMap<String, String>>();
+		if (home.listFiles(new FileExtensionFilter()).length > 0) {
+			for (File file : home.listFiles(new FileExtensionFilter())) {
+				HashMap<String, String> song = new HashMap<String, String>();
+				song.put(
+						"fileTitle",
+						file.getName().substring(0,
+								(file.getName().length() - 4)));
+				song.put("filePath", file.getPath());
+
+				// Adding each song to SongList
+				songsList.add(song);
+			}
+		}
+		// return songs list array
+		return songsList;
 	}
 }

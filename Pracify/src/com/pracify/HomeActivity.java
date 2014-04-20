@@ -23,7 +23,7 @@ public class HomeActivity extends ActionBarActivity {
 
 		mWebView = (WebView) findViewById(R.id.activity_home_webview);
 
-		mWebView.loadUrl("file:///android_asset/home.html");
+		mWebView.loadUrl("file:///android_asset/record.html");
 
 		RecordAudio recordAudioJS = new RecordAudio(this);
 		mWebView.addJavascriptInterface(recordAudioJS, "RA");

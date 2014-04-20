@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Pracify | Record</title>
+
+    <script src="js/modernizr.js"></script>
+    <link rel="stylesheet" href="css/main_style.css">
+	
+	<script>
+		$(document).ready(function() {
+			$( "#tabs" ).tabs();
+		});
+		function recordAudio(){
+			RA.startRecording();
+		}
+		
+		function playRecording(){
+			RA.startPlaying();
+		}
+		
+		function stopPlaying(){
+			RA.stopPlaying();
+		}
+		
+		function stopRecording(){
+			RA.stopRecording();
+		}
+	</script>
+</head>
+<body>
+
+<div id="outer-wrap">
+<div id="inner-wrap">
+
+    <header id="top" role="banner">
+        <div class="block">
+			<h1 class="block-title">Record</h1>
+            <a class="nav-btn" id="nav-open-btn" href="#nav">Book Navigation</a>
+        </div>
+    </header>
+
+    <nav id="nav" role="navigation">
+        <div class="block">
+            <h2 class="block-title">Menu</h2>
+            <ul>
+                <li class="is-active">
+                    <a href="">Record</a>
+                </li><!--
+             --><li>
+                    <a href="history.html">History</a>
+                </li><!--
+             --><li>
+                    <a href="settings.html">Settings</a>
+                </li>
+            </ul>
+            <a class="close-btn" id="nav-close-btn" href="#top">Return to Content</a>
+        </div>
+    </nav>
+
+    <div id="main" role="main">
+        <article class="block prose">
+			<center>
+				<input type="button" name="record" value="Record" onclick="recordAudio();"/><br/>
+				<input type="button" name="stop_recording" value="Stop Recording" onclick="stopRecording();"/><br/>
+				<input type="button" name="play" value="Play" onclick="playRecording();"/><br/>
+				<input type="button" name="stop_play" value="Stop Play" onclick="stopPlaying();"/>
+			</center>
+        </article>
+    </div>
+
+</div>
+<!--/#inner-wrap-->
+</div>
+<!--/#outer-wrap-->
+
+<script src="js/main.js"></script>
+
+</body>
+</html>
