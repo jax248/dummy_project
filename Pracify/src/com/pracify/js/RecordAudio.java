@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.support.v7.app.ActionBarActivity;
@@ -28,14 +31,6 @@ public class RecordAudio {
 	public RecordAudio(ActionBarActivity activity) {
 
 		this.activity = activity;
-		String dateInString = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss")
-				.format(new Date()).toString();
-
-		String fileName = dateInString + ".3gp";
-		String outputDir = getOutputDir();
-		mFileName = outputDir + "/" + fileName;
-
-		Log.d(LOG_TAG, "File Path : " + mFileName);
 	}
 
 	private String getOutputDir() {
@@ -54,7 +49,6 @@ public class RecordAudio {
 		return outputDir;
 	}
 
-	@JavascriptInterface
 	public void startPlaying() {
 		mPlayer = new MediaPlayer();
 		try {
@@ -62,6 +56,25 @@ public class RecordAudio {
 			mPlayer.prepare();
 			mPlayer.start();
 			CommonHelpers.showLongToast(activity, "Playing Started");
+		} catch (Exception e) {
+			Log.e(LOG_TAG, e.getMessage());
+			CommonHelpers.showLongToast(activity, "Error Playing");
+		}
+	}
+
+	@JavascriptInterface
+	public void startPlaying(String filePath) {
+		mFileName = filePath;
+		if (mPlayer.isPlaying()) {
+			mPlayer.release();
+			mPlayer = null;
+		}
+		mPlayer = new MediaPlayer();
+		try {
+			mPlayer.setDataSource(mFileName);
+			mPlayer.prepare();
+			mPlayer.start();
+			CommonHelpers.showLongToast(activity, "Playing Audio");
 		} catch (Exception e) {
 			Log.e(LOG_TAG, e.getMessage());
 			CommonHelpers.showLongToast(activity, "Error Playing");
@@ -77,6 +90,16 @@ public class RecordAudio {
 
 	@JavascriptInterface
 	public void startRecording() {
+
+		String dateInString = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
+				.format(new Date()).toString();
+
+		String fileName = dateInString + ".3gp";
+		String outputDir = getOutputDir();
+		mFileName = outputDir + "/" + fileName;
+
+		Log.d(LOG_TAG, "File Path : " + mFileName);
+
 		mRecorder = new MediaRecorder();
 		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -102,11 +125,29 @@ public class RecordAudio {
 	}
 
 	@JavascriptInterface
-	public void listFiles() {
+	public String listFiles() {
 		CommonHelpers.showLongToast(activity, "Getting Files");
 		ArrayList<HashMap<String, String>> songsList = getPlayList();
-		for (int i = 0; i < songsList.size(); i++) {
-			Log.d("Music File", songsList.get(i).get("fileTitle"));
+
+		JSONObject obj = new JSONObject();
+		JSONArray arr = new JSONArray();
+		try {
+			for (int i = 0; i < songsList.size(); i++) {
+				Log.d("Music File", songsList.get(i).get("fileTitle"));
+
+				obj.put("fileTitle", songsList.get(i).get("fileTitle"));
+				obj.put("filePath", songsList.get(i).get("filePath"));
+
+				arr.put(obj);
+
+				obj = new JSONObject();
+			}
+
+			return arr.toString();
+		} catch (Exception e) {
+
+			Log.e("Music File", "Error!! " + e.getMessage());
+			return null;
 		}
 	}
 

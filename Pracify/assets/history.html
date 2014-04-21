@@ -15,8 +15,29 @@
 	
 	<script>
 		$(document).ready(function() {
-			RA.listFiles();
-			alert("Ankur");
+			var updatedList = RA.listFiles();
+			
+			// clear the existing list
+			$('#listValue li').remove();
+			
+			var jsonArray = JSON.parse(updatedList);
+			
+			for (i = 0; i < jsonArray.length; i++){
+				$('#listValue').append('<li><form id="fileForm" action=""><input type="submit" name="fileName" value="'+jsonArray[i].fileTitle+'"><input type="hidden" name="filePath" value="'+jsonArray[i].filePath+ '"></form></li>');
+			}
+			
+			// Attach a submit handler to the form
+			$( "#fileForm" ).submit(function( event ) {
+		 
+				// Stop form from submitting normally
+				event.preventDefault();
+				  
+				// Get some values from elements on the page:
+				var $form = $( this ),
+						path = $form.find( "input[name='filePath']" ).val();
+						
+				RA.startPlaying(path);
+			});
 		});
 	</script>
 </head>
@@ -52,7 +73,10 @@
 
     <div id="main" role="main">
         <article class="block prose">
-			Ankur
+			<div id="list">
+				<ul id="listValue">
+				</ul>
+			</div>
         </article>
     </div>
 
