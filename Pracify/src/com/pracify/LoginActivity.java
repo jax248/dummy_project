@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.pracify.db.UserDetailsTableHandler;
 import com.pracify.js.Login;
 import com.pracify.js.Register;
+import com.pracify.js.ResetPwd;
 import com.pracify.util.MyAppWebViewClient;
 
 public class LoginActivity extends ActionBarActivity {
@@ -30,7 +31,7 @@ public class LoginActivity extends ActionBarActivity {
 				this);
 		Login loginJS = new Login(this);
 		Register registerJS = new Register(this);
-
+		ResetPwd resetJS = new ResetPwd(this);
 		if (userDetailsTableHandler.isUserLoggedIn()) {
 
 			Intent intent = new Intent(this, HomeActivity.class);
@@ -43,7 +44,7 @@ public class LoginActivity extends ActionBarActivity {
 
 		mWebView.addJavascriptInterface(loginJS, "Login");
 		mWebView.addJavascriptInterface(registerJS, "Register");
-
+		mWebView.addJavascriptInterface(resetJS, "ResetPwd");
 		mWebView.loadUrl("file:///android_asset/login.html");
 
 		// Enable Javascript

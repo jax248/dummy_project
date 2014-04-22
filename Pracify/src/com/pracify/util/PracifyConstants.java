@@ -10,7 +10,7 @@ public class PracifyConstants {
 
 	public static String loginURL = basURL + "/login.php";
 	public static String registerURL = basURL + "/register.php";
-
+	public static String resetpwdURL = basURL + "/resetpwd.php";
 	public static String recordingPath = "/Pracify";
 	public static String externalStoragePath = Environment
 			.getExternalStorageDirectory().getAbsolutePath() + recordingPath;

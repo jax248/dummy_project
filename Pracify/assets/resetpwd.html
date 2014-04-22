@@ -13,11 +13,7 @@ $(document).ready(function() {
     
     $body = $("body");
 
-    $(document).on({
-        ajaxStart: function() { $body.addClass("loading");    },
-        ajaxStop: function() { $body.removeClass("loading"); }    
-    });
-
+    
 	$('#loginBtn').click(function() {
 		window.location.href='login.html';
     });
@@ -31,25 +27,26 @@ $(document).ready(function() {
 		event.preventDefault();
  
         if($("#resetForm").valid()){
+	
+	        $body.addClass("loading");
 		       // Get some values from elements on the page:
 		    var $form = $( this ),
-					term = $form.find( "input[name='email_id']" ).val(),
-					url = $form.attr( "action" );
-		    // Send the data using post
-		    var posting = $.post(url, $( "#resetForm" ).serialize());
- 
-		    // Put the results in a div
-		    posting.done(function( data ) {
-			    $("#errorMsg").text(data);
-			    //alert(data);
-		    });
-        }
+					email_id = $form.find( "input[name='email_id']" ).val();
+					
+					ResetPwd.performResetpwd(email_id);
+	        }
 	});
 });
+function showErrorMsg(data){
+
+	$("#errorMsg").text(data);
+			
+	$body.removeClass("loading");
+}
 </script>
 </head>
 <body>
-<form class="box login" id="resetForm" action="http://bluntingthorns.com/pracify/PHPScripts/resetpwd.php">
+<form class="box login" id="resetForm" action="">
 	<fieldset class="boxBody">
 	  <label>Email ID</label>
 	  <input type="email" name="email_id" tabindex="1" placeholder="your@email.id" minlength="6" required>
