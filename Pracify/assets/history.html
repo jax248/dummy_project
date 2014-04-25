@@ -18,27 +18,23 @@
 			var updatedList = RA.listFiles();
 			
 			// clear the existing list
-			$('#listValue li').remove();
+			//$('#listValue li').remove();
 			
 			var jsonArray = JSON.parse(updatedList);
 			
 			for (i = 0; i < jsonArray.length; i++){
-				$('#listValue').append('<li><form id="fileForm" action=""><input type="submit" name="fileName" value="'+jsonArray[i].fileTitle+'"><input type="hidden" name="filePath" value="'+jsonArray[i].filePath+ '"></form></li>');
+				$('#listValue').append('<li><form id="fileForm'+i+'" action="" onsubmit="playFile(this)"><input type="submit" name="fileName" value="'+jsonArray[i].fileTitle+'"><input type="hidden" name="filePath" value="'+jsonArray[i].filePath+'"></form></li>');
 			}
-			
-			// Attach a submit handler to the form
-			$( "#fileForm" ).submit(function( event ) {
-		 
-				// Stop form from submitting normally
-				event.preventDefault();
-				  
-				// Get some values from elements on the page:
-				var $form = $( this ),
-						path = $form.find( "input[name='filePath']" ).val();
-						
-				RA.startPlaying(path);
-			});
+
 		});
+		
+		function playFile(form){
+		
+			var path = form.filePath.value;
+						
+			$('#audioPlayer').attr("src", path);
+			return false;
+		}
 	</script>
 </head>
 <body>
@@ -75,8 +71,19 @@
         <article class="block prose">
 			<div id="list">
 				<ul id="listValue">
+					<li>
+						<form id="fileForm" action="" onsubmit="testPlay(this)">
+							<input type="hidden" name="filePath" value="Ankur Path">
+							<input type="submit" name="fileName" value="Ankur">
+						</form>
+					</li>
 				</ul>
 			</div>
+			
+			<!-- Display the audio player with control buttons. -->
+			<audio id="audioPlayer" src="" controls autoplay loop> 
+				HTML5 audio not supported
+			</audio>
         </article>
     </div>
 

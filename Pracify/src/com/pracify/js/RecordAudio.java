@@ -49,31 +49,25 @@ public class RecordAudio {
 		return outputDir;
 	}
 
-	public void startPlaying() {
-		mPlayer = new MediaPlayer();
-		try {
-			mPlayer.setDataSource(mFileName);
-			mPlayer.prepare();
-			mPlayer.start();
-			CommonHelpers.showLongToast(activity, "Playing Started");
-		} catch (Exception e) {
-			Log.e(LOG_TAG, e.getMessage());
-			CommonHelpers.showLongToast(activity, "Error Playing");
-		}
-	}
-
 	@JavascriptInterface
 	public void startPlaying(String filePath) {
+		Log.d(LOG_TAG, "Play File Path : " + filePath);
 		mFileName = filePath;
+		Log.d(LOG_TAG, "Setting File Path for Player : " + mFileName);
 		if (mPlayer.isPlaying()) {
+			Log.d(LOG_TAG, "Closing existing Player");
 			mPlayer.release();
 			mPlayer = null;
 		}
+		Log.d(LOG_TAG, "Starting new Player");
 		mPlayer = new MediaPlayer();
 		try {
+			Log.d(LOG_TAG, "Set new Data Source with path : " + mFileName);
 			mPlayer.setDataSource(mFileName);
 			mPlayer.prepare();
+			Log.d(LOG_TAG, "Prepared new Player");
 			mPlayer.start();
+			Log.d(LOG_TAG, "Starting new Player");
 			CommonHelpers.showLongToast(activity, "Playing Audio");
 		} catch (Exception e) {
 			Log.e(LOG_TAG, e.getMessage());

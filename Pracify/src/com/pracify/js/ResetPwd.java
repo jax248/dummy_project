@@ -6,19 +6,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
-import com.pracify.HomeActivity;
 import com.pracify.LoginActivity;
-import com.pracify.db.UserDetailsTableHandler;
-import com.pracify.db.tableClasses.UserDetails;
 import com.pracify.network.AsyncJSONParser;
 import com.pracify.network.AsyncTaskCompleteListener;
-import com.pracify.util.CommonHelpers;
 import com.pracify.util.PracifyConstants;
 
 public class ResetPwd implements AsyncTaskCompleteListener<JSONObject> {
@@ -50,11 +45,11 @@ public class ResetPwd implements AsyncTaskCompleteListener<JSONObject> {
 			NameValuePair urlValue = new BasicNameValuePair("url",
 					PracifyConstants.resetpwdURL);
 			NameValuePair emailValue = new BasicNameValuePair("email_id", email);
-			//NameValuePair pwdValue = new BasicNameValuePair("password",
-				//	password);
+			// NameValuePair pwdValue = new BasicNameValuePair("password",
+			// password);
 
 			new AsyncJSONParser(this).execute(urlValue, emailValue);
-			//activity.showHTMLError(json.getString("msg"));
+			// activity.showHTMLError(json.getString("msg"));
 		} else {
 
 			Log.e("Login", "No network available");
@@ -69,9 +64,10 @@ public class ResetPwd implements AsyncTaskCompleteListener<JSONObject> {
 			if (json.getBoolean("resetpwd")) {
 
 				Log.d("ResetPwd", "Valid EmailID.");
-				//CommonHelpers.showLongToast(activity, "Please Check Your Mail");
+				// CommonHelpers.showLongToast(activity,
+				// "Please Check Your Mail");
 				activity.showHTMLError("Password reset link has been sent to your mail.");
-				} else {
+			} else {
 
 				Log.e("ResetPwd", "Error Reseting password. Returning message");
 
