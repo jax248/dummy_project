@@ -20,14 +20,6 @@
 			RA.startRecording();
 		}
 		
-		function playRecording(){
-			RA.startPlaying();
-		}
-		
-		function stopPlaying(){
-			RA.stopPlaying();
-		}
-		
 		function stopRecording(){
 			RA.stopRecording();
 		}
@@ -41,7 +33,7 @@
     <header id="top" role="banner">
         <div class="block">
 			<h1 class="block-title">Record</h1>
-            <a class="nav-btn" id="nav-open-btn" href="#nav">Book Navigation</a>
+            <a class="nav-btn" id="nav-open-btn" href="#nav">Navigation</a>
         </div>
     </header>
 
@@ -67,9 +59,7 @@
         <article class="block prose">
 			<center>
 				<input type="button" name="record" value="Record" onclick="recordAudio();"/><br/>
-				<input type="button" name="stop_recording" value="Stop Recording" onclick="stopRecording();"/><br/>
-				<input type="button" name="play" value="Play" onclick="playRecording();"/><br/>
-				<input type="button" name="stop_play" value="Stop Play" onclick="stopPlaying();"/>
+				<input type="button" name="stop_recording" value="Stop Recording" onclick="stopRecording();"/>
 			</center>
         </article>
     </div>

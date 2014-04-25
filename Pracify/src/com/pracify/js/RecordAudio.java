@@ -9,7 +9,6 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -26,7 +25,6 @@ public class RecordAudio {
 	private ActionBarActivity activity;
 
 	private MediaRecorder mRecorder = null;
-	private MediaPlayer mPlayer = null;
 
 	public RecordAudio(ActionBarActivity activity) {
 
@@ -47,39 +45,6 @@ public class RecordAudio {
 		file.mkdirs();
 
 		return outputDir;
-	}
-
-	@JavascriptInterface
-	public void startPlaying(String filePath) {
-		Log.d(LOG_TAG, "Play File Path : " + filePath);
-		mFileName = filePath;
-		Log.d(LOG_TAG, "Setting File Path for Player : " + mFileName);
-		if (mPlayer.isPlaying()) {
-			Log.d(LOG_TAG, "Closing existing Player");
-			mPlayer.release();
-			mPlayer = null;
-		}
-		Log.d(LOG_TAG, "Starting new Player");
-		mPlayer = new MediaPlayer();
-		try {
-			Log.d(LOG_TAG, "Set new Data Source with path : " + mFileName);
-			mPlayer.setDataSource(mFileName);
-			mPlayer.prepare();
-			Log.d(LOG_TAG, "Prepared new Player");
-			mPlayer.start();
-			Log.d(LOG_TAG, "Starting new Player");
-			CommonHelpers.showLongToast(activity, "Playing Audio");
-		} catch (Exception e) {
-			Log.e(LOG_TAG, e.getMessage());
-			CommonHelpers.showLongToast(activity, "Error Playing");
-		}
-	}
-
-	@JavascriptInterface
-	public void stopPlaying() {
-		mPlayer.release();
-		mPlayer = null;
-		CommonHelpers.showLongToast(activity, "Playing Stopped");
 	}
 
 	@JavascriptInterface
