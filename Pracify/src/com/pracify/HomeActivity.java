@@ -1,59 +1,58 @@
 package com.pracify;
 
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 
-import com.pracify.js.RecordAudio;
-import com.pracify.util.MyAppWebViewClient;
+import com.pracify.util.CommonHelpers;
 
 public class HomeActivity extends ActionBarActivity {
-
-	private WebView mWebView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_home);
 
-		mWebView = (WebView) findViewById(R.id.activity_home_webview);
-
-		mWebView.loadUrl("file:///android_asset/record.html");
-
-		RecordAudio recordAudioJS = new RecordAudio(this);
-		mWebView.addJavascriptInterface(recordAudioJS, "RA");
-
-		// Enable Javascript
-		WebSettings webSettings = mWebView.getSettings();
-		webSettings.setJavaScriptEnabled(true);
-
-		// Force links and redirects to open in the WebView instead of in a
-		// browser
-		mWebView.setWebViewClient(new MyAppWebViewClient());
+		/*
+		 * ActionBar actionBar = getSupportActionBar();
+		 * actionBar.setDisplayHomeAsUpEnabled(true);
+		 */
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.home, menu);
-		return true;
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.home, menu);
+		
+		MenuItem searchItem = menu.findItem(R.id.action_search);
+		SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+		
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_search:
+			CommonHelpers.showLongToast(this, "Search Action");
 			return true;
+		case R.id.action_new:
+			CommonHelpers.showLongToast(this, "New Action");
+			return true;
+		case R.id.action_refresh:
+			CommonHelpers.showLongToast(this, "Sync Action");
+			return true;
+		case R.id.action_settings:
+			CommonHelpers.showLongToast(this, "Settings Action");
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 }
