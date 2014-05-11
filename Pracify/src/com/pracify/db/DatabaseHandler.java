@@ -22,6 +22,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	protected static final String COLUMN_TABLE_USER_DETAILS_USER_NAME = "user_name";
 	protected static final String COLUMN_TABLE_USER_DETAILS_IS_LOGGED_IN = "is_logged_in";
 
+	// File Details table name
+	protected static final String TABLE_FILE_DETAILS = "file_details";
+	// File Details Table Columns names
+	protected static final String COLUMN_TABLE_FILE_DETAILS_ID = "file_id";
+	protected static final String COLUMN_TABLE_FILE_DETAILS_NAME = "file_name";
+	protected static final String COLUMN_TABLE_FILE_DETAILS_DESC = "file_desc";
+	protected static final String COLUMN_TABLE_FILE_DETAILS_PATH = "file_path";
+	protected static final String COLUMN_TABLE_FILE_DETAILS_OWNER = "file_owner";
+	protected static final String COLUMN_TABLE_FILE_DETAILS_CREATIONDATE = "created_on";
+	protected static final String COLUMN_TABLE_FILE_DETAILS_GROUPID = "group_id";
+
+	// Group Details table name
+	protected static final String TABLE_GROUP_DETAILS = "group_details";
+	// File Details Table Columns names
+	protected static final String COLUMN_TABLE_GROUP_DETAILS_ID = "group_id";
+	protected static final String COLUMN_TABLE_GROUP_DETAILS_NAME = "group_name";
+	protected static final String COLUMN_TABLE_GROUP_DETAILS_OWNER = "group_owner";
+	protected static final String COLUMN_TABLE_GROUP_DETAILS_CREATIONDATE = "created_on";
+	protected static final String COLUMN_TABLE_GROUP_DETAILS_MEMBERS = "members";
+
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -29,12 +49,35 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	// Creating Tables
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String sqlQuery = "CREATE TABLE " + TABLE_USER_DETAILS + "("
+
+		String sqlQuery = "CREATE TABLE " + TABLE_GROUP_DETAILS + "("
+				+ COLUMN_TABLE_GROUP_DETAILS_ID + " TEXT PRIMARY KEY,"
+				+ COLUMN_TABLE_GROUP_DETAILS_NAME + " TEXT NOT NULL,"
+				+ COLUMN_TABLE_GROUP_DETAILS_OWNER + " TEXT NOT NULL,"
+				+ COLUMN_TABLE_GROUP_DETAILS_CREATIONDATE + " TEXT NOT NULL,"
+				+ COLUMN_TABLE_GROUP_DETAILS_MEMBERS + " TEXT NOT NULL" + ")";
+		db.execSQL(sqlQuery);
+		Log.d("DatabaseHandler", TABLE_GROUP_DETAILS + " table Created");
+
+		sqlQuery = "CREATE TABLE " + TABLE_FILE_DETAILS + "("
+				+ COLUMN_TABLE_FILE_DETAILS_ID
+				+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ COLUMN_TABLE_FILE_DETAILS_NAME + " TEXT NOT NULL,"
+				+ COLUMN_TABLE_FILE_DETAILS_DESC + " TEXT NOT NULL,"
+				+ COLUMN_TABLE_FILE_DETAILS_PATH + " TEXT NOT NULL,"
+				+ COLUMN_TABLE_FILE_DETAILS_OWNER + " TEXT NOT NULL,"
+				+ COLUMN_TABLE_FILE_DETAILS_CREATIONDATE + " TEXT NOT NULL,"
+				+ COLUMN_TABLE_FILE_DETAILS_GROUPID + " TEXT NOT NULL" + ")";
+		db.execSQL(sqlQuery);
+		Log.d("DatabaseHandler", TABLE_FILE_DETAILS + " table Created");
+
+		sqlQuery = "CREATE TABLE " + TABLE_USER_DETAILS + "("
 				+ COLUMN_TABLE_USER_DETAILS_EMAIL_ID + " TEXT PRIMARY KEY,"
 				+ COLUMN_TABLE_USER_DETAILS_USER_NAME + " TEXT NOT NULL,"
-				+ COLUMN_TABLE_USER_DETAILS_IS_LOGGED_IN + " INTEGER NOT NULL" + ")";
+				+ COLUMN_TABLE_USER_DETAILS_IS_LOGGED_IN + " INTEGER NOT NULL"
+				+ ")";
 		db.execSQL(sqlQuery);
-		Log.d("DatabaseHandler",TABLE_USER_DETAILS + " table Created");
+		Log.d("DatabaseHandler", TABLE_USER_DETAILS + " table Created");
 	}
 
 	// Upgrading database

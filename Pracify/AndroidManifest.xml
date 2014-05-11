@@ -31,6 +31,22 @@
             android:name="com.pracify.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
+        <activity
+            android:name="com.pracify.RecordingActivity"
+            android:label="@string/title_activity_recording"
+            android:parentActivityName="com.pracify.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pracify.HomeActivity" />
+        </activity>
+        <activity
+            android:name="com.pracify.SaveRecordingActivity"
+            android:label="@string/title_activity_save_recording"
+            android:parentActivityName="com.pracify.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pracify.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

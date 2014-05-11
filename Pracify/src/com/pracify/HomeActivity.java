@@ -1,5 +1,8 @@
 package com.pracify;
 
+import java.io.File;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -16,11 +19,6 @@ public class HomeActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-
-		/*
-		 * ActionBar actionBar = getSupportActionBar();
-		 * actionBar.setDisplayHomeAsUpEnabled(true);
-		 */
 	}
 
 	@Override
@@ -28,10 +26,11 @@ public class HomeActivity extends ActionBarActivity {
 		// Inflate the menu items for use in the action bar
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.home, menu);
-		
+
 		MenuItem searchItem = menu.findItem(R.id.action_search);
-		SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-		
+		SearchView searchView = (SearchView) MenuItemCompat
+				.getActionView(searchItem);
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -43,7 +42,8 @@ public class HomeActivity extends ActionBarActivity {
 			CommonHelpers.showLongToast(this, "Search Action");
 			return true;
 		case R.id.action_new:
-			CommonHelpers.showLongToast(this, "New Action");
+			Intent intent = new Intent(this, RecordingActivity.class);
+			startActivity(intent);
 			return true;
 		case R.id.action_refresh:
 			CommonHelpers.showLongToast(this, "Sync Action");
@@ -53,6 +53,22 @@ public class HomeActivity extends ActionBarActivity {
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+
+		super.onDestroy();
+		try {
+			File dir = this.getCacheDir();
+			if (dir != null && dir.isDirectory()) {
+				CommonHelpers.deleteDir(dir);
+			}
+		} catch (Exception e) {
+			CommonHelpers.showLongToast(this,
+					"Unable to delete Cache directory!!");
+			e.printStackTrace();
 		}
 	}
 }

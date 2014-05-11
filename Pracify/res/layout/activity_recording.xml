@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.pracify.RecordingActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:adjustViewBounds="true"
+        android:clickable="false"
+        android:contentDescription="@string/img_record"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:longClickable="false"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/start_record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:onClick="startRecording"
+        android:text="@string/start_recording" />
+
+    <Button
+        android:id="@+id/stop_record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="stopRecording"
+        android:text="@string/stop_recording" />
+
+</LinearLayout>

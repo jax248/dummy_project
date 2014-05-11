@@ -98,6 +98,21 @@ public class UserDetailsTableHandler extends DatabaseHandler {
 		return userDetailsList;
 	}
 
+	public String getUserID() {
+
+		List<UserDetails> userDetailsList = getAllUserDetails();
+
+		if (userDetailsList.size() == 1) {
+
+			return userDetailsList.get(0).getEmail_id();
+		} else {
+
+			deleteAllDetails();
+
+			return "Error while Getting User Details!! Please Login Again..";
+		}
+	}
+
 	@JavascriptInterface
 	public boolean isUserLoggedIn() {
 
