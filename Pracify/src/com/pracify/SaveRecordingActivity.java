@@ -26,6 +26,8 @@ public class SaveRecordingActivity extends ActionBarActivity {
 	private String mFileName = null;
 
 	EditText fileName, fileDescription;
+	String fileID;
+	FileDetails fileDetails = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,21 +40,36 @@ public class SaveRecordingActivity extends ActionBarActivity {
 		startPlaying = (Button) findViewById(R.id.startPlay);
 		stopPlay = (Button) findViewById(R.id.stopPlay);
 
-		Intent intent = getIntent();
-		mFileName = intent.getStringExtra(PracifyConstants.filePathIntent);
-		Log.d(LOG_TAG, "Got File : " + mFileName);
-
 		fileName = (EditText) findViewById(R.id.editText1);
 		fileDescription = (EditText) findViewById(R.id.editText2);
 
-		fileName.setText(CommonHelpers.getCurrentTimestamp());
+		Intent intent = getIntent();
+		fileID = intent.getStringExtra(PracifyConstants.fileID);
+		if (!(fileID == null || fileID.isEmpty() || fileID.contains("NULL"))) {
 
+			FileDetailsTableHandler fileDetailsTableHandler = new FileDetailsTableHandler(
+					this);
+
+			fileDetails = fileDetailsTableHandler.getFileDetails(fileID);
+
+			if (fileDetails != null) {
+				fileName.setText(fileDetails.getName());
+				fileDescription.setText(fileDetails.getDesc());
+				mFileName = fileDetails.getPath();
+			} else {
+				CommonHelpers.showLongToast(this, "Error getting file!!");
+			}
+
+		} else {
+			mFileName = intent.getStringExtra(PracifyConstants.filePathIntent);
+			fileName.setText(CommonHelpers.getCurrentTimestamp());
+		}
+		Log.d(LOG_TAG, "Got File Path : " + mFileName);
 	}
 
 	public void saveRecord(View view) {
 
 		String name, description, path, owner, group;
-		FileDetails fileDetails;
 
 		name = fileName.getText().toString();
 
@@ -63,25 +80,43 @@ public class SaveRecordingActivity extends ActionBarActivity {
 
 		description = fileDescription.getText().toString();
 
-		path = copyToAppFolder(mFileName, name);
+		if (fileDetails == null) {
 
-		UserDetailsTableHandler userDetailsTableHandler = new UserDetailsTableHandler(
-				this);
-		owner = userDetailsTableHandler.getUserID();
+			path = copyToAppFolder(mFileName, name);
 
-		if (owner.contains("Error")) {
-			CommonHelpers.showLongToast(this, owner);
-			return;
+			UserDetailsTableHandler userDetailsTableHandler = new UserDetailsTableHandler(
+					this);
+			owner = userDetailsTableHandler.getUserID();
+
+			if (owner.contains("Error")) {
+				CommonHelpers.showLongToast(this, owner);
+				return;
+			}
+
+			group = "DummyGroup";
+			fileDetails = new FileDetails(name, description, path, owner, group);
+
+			FileDetailsTableHandler fileDetailsTableHandler = new FileDetailsTableHandler(
+					this);
+			fileDetailsTableHandler.addFileDetails(fileDetails);
+			
+		} else {
+
+			group = "DummyGroup";
+			path = fileDetails.getPath();
+			owner = fileDetails.getOwner();
+			int id = Integer.parseInt(fileDetails.getId());
+
+			fileDetails = new FileDetails(id, name, description, path, owner,
+					group);
+
+			FileDetailsTableHandler fileDetailsTableHandler = new FileDetailsTableHandler(
+					this);
+			if (!(fileDetailsTableHandler.updateFileDetails(fileDetails) > 0)) {
+				CommonHelpers.showLongToast(this,
+						"Unable to update record. Please try again later!");
+			}
 		}
-
-		group = "DummyGroup";
-
-		fileDetails = new FileDetails(name, description, path, owner, group);
-
-		FileDetailsTableHandler fileDetailsTableHandler = new FileDetailsTableHandler(
-				this);
-		fileDetailsTableHandler.addFileDetails(fileDetails);
-
 		finish();
 	}
 

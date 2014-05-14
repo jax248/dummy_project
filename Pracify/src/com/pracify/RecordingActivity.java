@@ -72,6 +72,7 @@ public class RecordingActivity extends ActionBarActivity {
 		CommonHelpers.showLongToast(this, "Recording Stopped");
 		Intent intent = new Intent(this, SaveRecordingActivity.class);
 		intent.putExtra(PracifyConstants.filePathIntent, mFileName);
+		intent.putExtra(PracifyConstants.fileID, "NULL");
 		startActivity(intent);
 		finish();
 	}

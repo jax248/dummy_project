@@ -23,6 +23,18 @@ public class FileDetails {
 	}
 
 	public FileDetails(int id, String name, String desc, String path,
+			String owner, String group) {
+
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.path = path;
+		this.owner = owner;
+		this.creation_date = CommonHelpers.getCurrentTimestamp();
+		this.group = group;
+	}
+
+	public FileDetails(int id, String name, String desc, String path,
 			String owner, String creation_date, String group) {
 
 		this.id = id;

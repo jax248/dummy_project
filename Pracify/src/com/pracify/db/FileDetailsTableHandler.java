@@ -122,6 +122,7 @@ public class FileDetailsTableHandler extends DatabaseHandler {
 
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_TABLE_FILE_DETAILS_NAME, fileDetails.getName());
+		values.put(COLUMN_TABLE_FILE_DETAILS_DESC, fileDetails.getDesc());
 		values.put(COLUMN_TABLE_FILE_DETAILS_PATH, fileDetails.getPath());
 		values.put(COLUMN_TABLE_FILE_DETAILS_OWNER, fileDetails.getOwner());
 		values.put(COLUMN_TABLE_FILE_DETAILS_CREATIONDATE,
