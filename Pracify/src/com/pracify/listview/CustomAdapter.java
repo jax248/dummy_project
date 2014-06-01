@@ -12,9 +12,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import com.pracify.HomeActivity;
 import com.pracify.R;
+import com.pracify.HomeActivity;
+
 
 /********* Adapter class extends with BaseAdapter and implements with OnClickListener ************/
 public class CustomAdapter extends BaseAdapter implements OnClickListener {

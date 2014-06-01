@@ -3,6 +3,7 @@ package com.pracify;
 import java.io.File;
 
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -17,17 +18,17 @@ import com.pracify.db.UserDetailsTableHandler;
 import com.pracify.db.tableClasses.FileDetails;
 import com.pracify.util.CommonHelpers;
 import com.pracify.util.PracifyConstants;
+import com.pracify.util.VisualizerView;
 
 public class SaveRecordingActivity extends ActionBarActivity {
 
 	private MediaPlayer myPlayer;
-	private Button startPlaying, stopPlay;
+	private Button startPlaying, stopPlay,save;
 	private static final String LOG_TAG = "SaveRecording";
 	private String mFileName = null;
-
+    private VisualizerView visualizer = null;
+    private String Context ;
 	EditText fileName, fileDescription;
-	String fileID;
-	FileDetails fileDetails = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,38 +39,23 @@ public class SaveRecordingActivity extends ActionBarActivity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		startPlaying = (Button) findViewById(R.id.startPlay);
-		stopPlay = (Button) findViewById(R.id.stopPlay);
+		//stopPlay = (Button) findViewById(R.id.stopPlay);
+		save = (Button) findViewById(R.id.saveButton);
+		Intent intent = getIntent();
+		mFileName = intent.getStringExtra(PracifyConstants.filePathIntent);
+		Log.d(LOG_TAG, "Got File : " + mFileName);
 
 		fileName = (EditText) findViewById(R.id.editText1);
 		fileDescription = (EditText) findViewById(R.id.editText2);
 
-		Intent intent = getIntent();
-		fileID = intent.getStringExtra(PracifyConstants.fileID);
-		if (!(fileID == null || fileID.isEmpty() || fileID.contains("NULL"))) {
+		fileName.setText(CommonHelpers.getCurrentTimestamp());
 
-			FileDetailsTableHandler fileDetailsTableHandler = new FileDetailsTableHandler(
-					this);
-
-			fileDetails = fileDetailsTableHandler.getFileDetails(fileID);
-
-			if (fileDetails != null) {
-				fileName.setText(fileDetails.getName());
-				fileDescription.setText(fileDetails.getDesc());
-				mFileName = fileDetails.getPath();
-			} else {
-				CommonHelpers.showLongToast(this, "Error getting file!!");
-			}
-
-		} else {
-			mFileName = intent.getStringExtra(PracifyConstants.filePathIntent);
-			fileName.setText(CommonHelpers.getCurrentTimestamp());
-		}
-		Log.d(LOG_TAG, "Got File Path : " + mFileName);
 	}
 
 	public void saveRecord(View view) {
 
 		String name, description, path, owner, group;
+		FileDetails fileDetails;
 
 		name = fileName.getText().toString();
 
@@ -80,49 +66,31 @@ public class SaveRecordingActivity extends ActionBarActivity {
 
 		description = fileDescription.getText().toString();
 
-		if (fileDetails == null) {
+		path = copyToAppFolder(mFileName, name);
 
-			path = copyToAppFolder(mFileName, name);
+		UserDetailsTableHandler userDetailsTableHandler = new UserDetailsTableHandler(
+				this);
+		owner = userDetailsTableHandler.getUserID();
 
-			UserDetailsTableHandler userDetailsTableHandler = new UserDetailsTableHandler(
-					this);
-			owner = userDetailsTableHandler.getUserID();
-
-			if (owner.contains("Error")) {
-				CommonHelpers.showLongToast(this, owner);
-				return;
-			}
-
-			group = "DummyGroup";
-			fileDetails = new FileDetails(name, description, path, owner, group);
-
-			FileDetailsTableHandler fileDetailsTableHandler = new FileDetailsTableHandler(
-					this);
-			fileDetailsTableHandler.addFileDetails(fileDetails);
-			
-		} else {
-
-			group = "DummyGroup";
-			path = fileDetails.getPath();
-			owner = fileDetails.getOwner();
-			int id = Integer.parseInt(fileDetails.getId());
-
-			fileDetails = new FileDetails(id, name, description, path, owner,
-					group);
-
-			FileDetailsTableHandler fileDetailsTableHandler = new FileDetailsTableHandler(
-					this);
-			if (!(fileDetailsTableHandler.updateFileDetails(fileDetails) > 0)) {
-				CommonHelpers.showLongToast(this,
-						"Unable to update record. Please try again later!");
-			}
+		if (owner.contains("Error")) {
+			CommonHelpers.showLongToast(this, owner);
+			return;
 		}
+
+		group = "DummyGroup";
+
+		fileDetails = new FileDetails(name, description, path, owner, group);
+
+		FileDetailsTableHandler fileDetailsTableHandler = new FileDetailsTableHandler(
+				this);
+		fileDetailsTableHandler.addFileDetails(fileDetails);
+
 		finish();
 	}
 
 	private String copyToAppFolder(String path, String name) {
 
-		String newPath = CommonHelpers.getOutputDir(this) + "/" + name + ".3gp";
+		String newPath = CommonHelpers.getOutputDir(this) + "/" + name + ".mp4";
 
 		File src = new File(path);
 		File dst = new File(newPath);
@@ -134,23 +102,22 @@ public class SaveRecordingActivity extends ActionBarActivity {
 
 	public void playRecording(View view) {
 		try {
-			myPlayer = new MediaPlayer();
-			myPlayer.setDataSource(mFileName);
-			myPlayer.setLooping(true);
-			myPlayer.prepare();
-			myPlayer.start();
-
-			startPlaying.setEnabled(false);
-			stopPlay.setEnabled(true);
-
-			CommonHelpers.showLongToast(this, "Start play the recording...");
+			
+			//startPlaying.setEnabled(false);
+			//stopPlay.setEnabled(true);
+			//save.setEnabled(false);
+			Intent intent = new Intent(this, Visualize.class);	
+			intent.putExtra(PracifyConstants.filePathIntent, mFileName);
+			intent.putExtra(PracifyConstants.fileID, "NULL");
+			startActivity(intent);
+			
 		} catch (Exception e) {
-			Log.e(LOG_TAG, e.getMessage());
+			Log.e(LOG_TAG, "play recording"+e.getMessage());
 			e.printStackTrace();
 		}
 	}
 
-	public void stopPlay(View view) {
+	/*public void stopPlay(View view) {
 		try {
 			if (myPlayer != null) {
 				myPlayer.stop();
@@ -158,6 +125,7 @@ public class SaveRecordingActivity extends ActionBarActivity {
 				myPlayer = null;
 				startPlaying.setEnabled(true);
 				stopPlay.setEnabled(false);
+				save.setEnabled(true);
 				CommonHelpers.showLongToast(this,
 						"Stop playing the recording...");
 			}
@@ -165,5 +133,13 @@ public class SaveRecordingActivity extends ActionBarActivity {
 			Log.e(LOG_TAG, e.getMessage());
 			e.printStackTrace();
 		}
+	}*/
+	
+	public void cancelRecord(View view)
+	{
+		finish();
+		
+	
 	}
+	
 }

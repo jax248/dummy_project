@@ -44,8 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>
-
-    <LinearLayout
+   <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -58,12 +57,6 @@
             android:onClick="playRecording"
             android:text="@string/start_play" />
 
-        <Button
-            android:id="@+id/stopPlay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="stopPlay"
-            android:text="@string/stop_play" />
     </LinearLayout>
 
     <Button
@@ -77,6 +70,7 @@
         android:id="@+id/cancelButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="cancelRecord"
         android:text="@string/cancel" />
 
 </LinearLayout>

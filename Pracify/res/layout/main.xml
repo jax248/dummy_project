@@ -30,8 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="0.5"
-            android:onClick="strtRecording"
-            android:text="start_record" >
+            android:onClick="startPressed"
+            android:text="Start" >
         </Button>
 
         <Button
@@ -39,8 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="0.5"
-            android:onClick="stopRecording"
-            android:text="stop_record" >
+            android:onClick="stopPressed"
+            android:text="Stop" >
         </Button>
     </LinearLayout>
 

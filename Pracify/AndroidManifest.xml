@@ -47,6 +47,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.pracify.HomeActivity" />
         </activity>
+        <activity
+            android:name="com.pracify.Visualize"
+            android:label="@string/title_activity_save_recording"
+            android:parentActivityName="com.pracify.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pracify.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>
