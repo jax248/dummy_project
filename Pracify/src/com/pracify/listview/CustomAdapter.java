@@ -12,9 +12,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.pracify.R;
-import com.pracify.HomeActivity;
 
+import com.pracify.HomeActivity;
+import com.pracify.R;
 
 /********* Adapter class extends with BaseAdapter and implements with OnClickListener ************/
 public class CustomAdapter extends BaseAdapter implements OnClickListener {
@@ -90,7 +90,7 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 			holder = (ViewHolder) vi.getTag();
 
 		if (data.size() <= 0) {
-			holder.fileName.setText("No Data");
+			holder.fileName.setText("No existing Recordings....");
 
 		} else {
 			/***** Get each Model object from Arraylist ********/

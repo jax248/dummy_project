@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class CommonHelpers {
 		return dateFormat.format(cal.getTime());
 	}
 
-	public static String getOutputDir(ActionBarActivity activity) {
+	public static String getOutputDir(Context activity) {
 		String outputDir;
 		File file;
 		if (PracifyConstants.isSDPresent) {

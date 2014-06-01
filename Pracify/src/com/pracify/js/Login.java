@@ -1,31 +1,56 @@
 package com.pracify.js;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
-import com.pracify.HomeActivity;
 import com.pracify.LoginActivity;
-import com.pracify.db.UserDetailsTableHandler;
-import com.pracify.db.tableClasses.UserDetails;
-import com.pracify.network.AsyncJSONParser;
-import com.pracify.network.AsyncTaskCompleteListener;
+import com.pracify.network.JSONParser;
 import com.pracify.util.PracifyConstants;
 
-public class Login implements AsyncTaskCompleteListener<JSONObject> {
+public class Login {
 
 	private LoginActivity activity;
+	String email_id, password;
+
+	private static HttpClient mHttpClient;
+
+	private static final String TAG = "NetworkUtilities";
+	public static final String PARAM_USERNAME = "email_id";
+	public static final String PARAM_PASSWORD = "password";
+	public static final int REGISTRATION_TIMEOUT = 30 * 1000; // ms
 
 	public Login(LoginActivity activity) {
 		this.activity = activity;
+	}
+
+	/**
+	 * Configures the httpClient to connect to the URL provided.
+	 */
+	public static void maybeCreateHttpClient() {
+		if (mHttpClient == null) {
+			mHttpClient = new DefaultHttpClient();
+			final HttpParams params = mHttpClient.getParams();
+			HttpConnectionParams.setConnectionTimeout(params,
+					REGISTRATION_TIMEOUT);
+			HttpConnectionParams.setSoTimeout(params, REGISTRATION_TIMEOUT);
+			ConnManagerParams.setTimeout(params, REGISTRATION_TIMEOUT);
+		}
 	}
 
 	/**
@@ -37,6 +62,9 @@ public class Login implements AsyncTaskCompleteListener<JSONObject> {
 	@JavascriptInterface
 	public void performLogin(String email, String password) {
 
+		email_id = email;
+		this.password = password;
+
 		Log.d("Login", "Performing Login");
 
 		ConnectivityManager connMgr = (ConnectivityManager) activity
@@ -46,13 +74,24 @@ public class Login implements AsyncTaskCompleteListener<JSONObject> {
 
 			Log.d("Login", "Network Available");
 
-			NameValuePair urlValue = new BasicNameValuePair("url",
-					PracifyConstants.loginURL);
-			NameValuePair emailValue = new BasicNameValuePair("email_id", email);
-			NameValuePair pwdValue = new BasicNameValuePair("password",
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			NameValuePair emailValue = new BasicNameValuePair(PARAM_USERNAME,
+					email);
+			NameValuePair pwdValue = new BasicNameValuePair(PARAM_PASSWORD,
 					password);
 
-			new AsyncJSONParser(this).execute(urlValue, emailValue, pwdValue);
+			params.add(emailValue);
+			params.add(pwdValue);
+
+			JSONParser jsonParser = new JSONParser();
+
+			JSONObject json = jsonParser.getJSONFromUrl(
+					PracifyConstants.loginURL, params);
+
+			activity.loginTask(json, email_id, password);
+
+			// new AsyncJSONParser(this).execute(urlValue, emailValue,
+			// pwdValue);
 		} else {
 
 			Log.e("Login", "No network available");
@@ -60,40 +99,31 @@ public class Login implements AsyncTaskCompleteListener<JSONObject> {
 		}
 	}
 
-	@Override
-	public void onTaskComplete(JSONObject json) {
+	public static boolean validateUser(String email, String pwd) {
+
+		Log.d("Login", "Verify Login");
+
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		NameValuePair emailValue = new BasicNameValuePair(PARAM_USERNAME, email);
+		NameValuePair pwdValue = new BasicNameValuePair(PARAM_PASSWORD, pwd);
+
+		params.add(emailValue);
+		params.add(pwdValue);
+
+		JSONParser jsonParser = new JSONParser();
+
+		JSONObject json = jsonParser.getJSONFromUrl(PracifyConstants.loginURL,
+				params);
 
 		try {
 			if (json.getBoolean("login")) {
-
-				Log.d("Login", "Valid login. Starting new activity");
-
-				UserDetailsTableHandler userDetailsTableHandler = new UserDetailsTableHandler(
-						activity);
-
-				UserDetails userDetails = new UserDetails(
-						json.getString("email_id"),
-						json.getString("user_name"), 1);
-
-				userDetailsTableHandler.deleteAllDetails();
-				userDetailsTableHandler.addUserDetails(userDetails);
-
-				Intent intent = new Intent(activity, HomeActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				activity.startActivity(intent);
-				activity.finish();
-
-				Log.d("Login", "Started new activity");
+				return true;
 			} else {
-
-				Log.d("Login", "Error login. Returning message");
-
-				activity.showHTMLError(json.getString("msg"));
+				return false;
 			}
 		} catch (JSONException e) {
-
 			e.printStackTrace();
-			Log.e("Login", e.getMessage());
+			return false;
 		}
 	}
 }

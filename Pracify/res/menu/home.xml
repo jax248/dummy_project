@@ -21,13 +21,6 @@
         android:id="@+id/action_refresh"
         android:icon="@drawable/ic_action_refresh"
         android:title="@string/action_refresh"
-        yourapp:showAsAction="ifRoom"/>
-
-    <!-- Settings -->
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_action_settings"
-        android:title="@string/action_settings"
-        yourapp:showAsAction="ifRoom"/>
+        yourapp:showAsAction="always"/>
 
 </menu>

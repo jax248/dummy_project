@@ -1,47 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/bg"
-    android:orientation="vertical" >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.pracify.RecordingActivity"
+    tools:ignore="MergeRootFrame" >
 
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:layout_weight="1"
-        android:background="#000" >
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:adjustViewBounds="true"
+        android:clickable="false"
+        android:contentDescription="@string/img_record"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:longClickable="false"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_launcher" />
 
-        <com.pracify.util.VisualizerView
-            android:id="@+id/VisualizerView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-        </com.pracify.util.VisualizerView>
-    </FrameLayout>
-
-   
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <Button
+        android:id="@+id/start_record"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0" >
+        android:gravity="center_horizontal"
+        android:onClick="startRecording"
+        android:text="@string/start_recording" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="0.5"
-            android:onClick="strtRecording"
-            android:text="start_record" >
-        </Button>
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="0.5"
-            android:onClick="stopRecording"
-            android:text="stop_record" >
-        </Button>
-    </LinearLayout>
+    <Button
+        android:id="@+id/stop_record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="stopRecording"
+        android:text="@string/stop_recording" />
 
 </LinearLayout>

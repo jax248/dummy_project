@@ -23,15 +23,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	protected static final String COLUMN_TABLE_USER_DETAILS_IS_LOGGED_IN = "is_logged_in";
 
 	// File Details table name
-	protected static final String TABLE_FILE_DETAILS = "file_details";
+	public static final String TABLE_FILE_DETAILS = "file_details";
 	// File Details Table Columns names
-	protected static final String COLUMN_TABLE_FILE_DETAILS_ID = "file_id";
-	protected static final String COLUMN_TABLE_FILE_DETAILS_NAME = "file_name";
-	protected static final String COLUMN_TABLE_FILE_DETAILS_DESC = "file_desc";
-	protected static final String COLUMN_TABLE_FILE_DETAILS_PATH = "file_path";
-	protected static final String COLUMN_TABLE_FILE_DETAILS_OWNER = "file_owner";
-	protected static final String COLUMN_TABLE_FILE_DETAILS_CREATIONDATE = "created_on";
-	protected static final String COLUMN_TABLE_FILE_DETAILS_GROUPID = "group_id";
+	public static final String COLUMN_TABLE_FILE_DETAILS_ID = "file_id";
+	public static final String COLUMN_TABLE_FILE_DETAILS_NAME = "file_name";
+	public static final String COLUMN_TABLE_FILE_DETAILS_DESC = "file_desc";
+	public static final String COLUMN_TABLE_FILE_DETAILS_PATH = "file_path";
+	public static final String COLUMN_TABLE_FILE_DETAILS_OWNER = "file_owner";
+	public static final String COLUMN_TABLE_FILE_DETAILS_CREATIONDATE = "created_on";
+	public static final String COLUMN_TABLE_FILE_DETAILS_GROUPID = "group_id";
 
 	// Group Details table name
 	protected static final String TABLE_GROUP_DETAILS = "group_details";

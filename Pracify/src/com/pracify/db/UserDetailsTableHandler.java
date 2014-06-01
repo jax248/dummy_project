@@ -109,7 +109,7 @@ public class UserDetailsTableHandler extends DatabaseHandler {
 
 			deleteAllDetails();
 
-			return "Error while Getting User Details!! Please Login Again..";
+			return null;
 		}
 	}
 

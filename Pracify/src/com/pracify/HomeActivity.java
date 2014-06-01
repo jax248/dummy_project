@@ -4,9 +4,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
@@ -16,6 +22,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.pracify.authenticator.AccountAuthenticator;
+import com.pracify.contentprovider.FileDetailsContract;
 import com.pracify.db.FileDetailsTableHandler;
 import com.pracify.db.tableClasses.FileDetails;
 import com.pracify.listview.CustomAdapter;
@@ -28,24 +36,114 @@ public class HomeActivity extends ActionBarActivity {
 	ListView fileListView;
 	CustomAdapter adapter;
 	List<FileDetails> fileDetailsList;
+	Resources mRes;
+
 	private static final String LOG_TAG = "HomeActivity";
 	public ArrayList<ListModel> CustomListViewValuesArr = new ArrayList<ListModel>();
+	private Account mAccount;
+
+	// Sync interval constants
+	public static final long MILLISECONDS_PER_SECOND = 1000L;
+	public static final long SECONDS_PER_MINUTE = 60L;
+	public static final long SYNC_INTERVAL_IN_MINUTES = 1L;
+	public static final long SYNC_INTERVAL = SYNC_INTERVAL_IN_MINUTES
+			* SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 
+		AccountManager am = AccountManager.get(this);
+
+		mAccount = am.getAccountsByType(AccountAuthenticator.ACCOUNT_TYPE)[0];
+
 		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
 		setListData();
 
 		fileListView = (ListView) findViewById(R.id.listView);
 
-		Resources res = getResources();
+		mRes = getResources();
 
 		/**************** Create Custom Adapter *********/
-		adapter = new CustomAdapter(this, CustomListViewValuesArr, res);
+		adapter = new CustomAdapter(this, CustomListViewValuesArr, mRes);
 		fileListView.setAdapter(adapter);
+
+		ContentResolver mResolver = getContentResolver();
+
+		/******** Turn on periodic Sync ******/
+		ContentResolver.addPeriodicSync(mAccount,
+				FileDetailsContract.AUTHORITY, new Bundle(), SYNC_INTERVAL);
+
+		/*
+		 * Create a content observer object. Its code does not mutate the
+		 * provider, so set selfChange to "false"
+		 */
+		TableObserver observer = new TableObserver(null);
+		/*
+		 * Register the observer for the data table. The table's path and any of
+		 * its subpaths trigger the observer.
+		 */
+		mResolver.registerContentObserver(FileDetailsContract.CONTENT_URI,
+				true, observer);
+	}
+
+	public class TableObserver extends ContentObserver {
+
+		public TableObserver(Handler handler) {
+			super(handler);
+		}
+
+		/*
+		 * Define a method that's called when data in the observed content
+		 * provider changes. This method signature is provided for compatibility
+		 * with older platforms.
+		 */
+		@Override
+		public void onChange(boolean selfChange) {
+			/*
+			 * Invoke the method signature available as of Android platform
+			 * version 4.1, with a null URI.
+			 */
+			onChange(selfChange, null);
+		}
+
+		/*
+		 * Define a method that's called when data in the observed content
+		 * provider changes.
+		 */
+		@Override
+		public void onChange(boolean selfChange, Uri changeUri) {
+			/*
+			 * Ask the framework to run your sync adapter. To maintain backward
+			 * compatibility, assume that changeUri is null.
+			 */
+			ContentResolver.requestSync(mAccount,
+					FileDetailsContract.AUTHORITY, null);
+		}
+	}
+
+	/**
+	 * Respond to Sync click by calling requestSync(). This is an asynchronous
+	 * operation.
+	 * 
+	 * This method is attached to the refresh button in the layout XML file
+	 * 
+	 * @param v
+	 *            The View associated with the method call, in this case a
+	 *            Button
+	 */
+	public void onRefreshButtonClick() {
+		// Pass the settings flags by inserting them in a bundle
+		Bundle settingsBundle = new Bundle();
+		settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+		settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+		/*
+		 * Request the sync for the default account, authority, and manual sync
+		 * settings
+		 */
+		ContentResolver.requestSync(mAccount, FileDetailsContract.AUTHORITY,
+				settingsBundle);
 	}
 
 	/****** Function to set data in ArrayList *************/
@@ -87,10 +185,7 @@ public class HomeActivity extends ActionBarActivity {
 	protected void onResume() {
 		super.onResume();
 		setListData();
-		Resources res = getResources();
-
-		/**************** Create Custom Adapter *********/
-		adapter = new CustomAdapter(this, CustomListViewValuesArr, res);
+		adapter = new CustomAdapter(this, CustomListViewValuesArr, mRes);
 		fileListView.setAdapter(adapter);
 	}
 
@@ -119,10 +214,7 @@ public class HomeActivity extends ActionBarActivity {
 			startActivity(intent);
 			return true;
 		case R.id.action_refresh:
-			CommonHelpers.showLongToast(this, "Sync Action");
-			return true;
-		case R.id.action_settings:
-			CommonHelpers.showLongToast(this, "Settings Action");
+			onRefreshButtonClick();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

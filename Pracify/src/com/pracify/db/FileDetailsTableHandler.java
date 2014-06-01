@@ -107,6 +107,30 @@ public class FileDetailsTableHandler extends DatabaseHandler {
 		return fileDetailsList;
 	}
 
+	public List<String> getLocalFileList() {
+		List<String> fileList = new ArrayList<String>();
+		// Select All Query
+		String selectQuery = "SELECT  COLUMN_TABLE_FILE_DETAILS_ID FROM "
+				+ TABLE_FILE_DETAILS;
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+
+				String fileID = "" + cursor.getInt(0);
+				fileList.add(fileID);
+			} while (cursor.moveToNext());
+		}
+
+		db.close();
+
+		// return list
+		return fileList;
+	}
+
 	public void deleteAllDetails() {
 
 		SQLiteDatabase db = this.getWritableDatabase();
