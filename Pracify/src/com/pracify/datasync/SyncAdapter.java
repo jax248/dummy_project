@@ -224,33 +224,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					if (filesToBeUploaded.contains(fileID)) {
 
 						String fileName = curFileList.getString(1);
-						Log.d("SyncAdapter -> uploadFilesToServer",
-								"fileName : " + fileName);
 
 						String fileDesc = curFileList.getString(2);
-						Log.d("SyncAdapter -> uploadFilesToServer",
-								"fileDesc : " + fileDesc);
 
 						String filePath = curFileList.getString(3);
-						Log.d("SyncAdapter -> uploadFilesToServer",
-								"filePath : " + filePath);
 
 						String fileOwner = curFileList.getString(4);
-						Log.d("SyncAdapter -> uploadFilesToServer",
-								"fileOwner : " + fileOwner);
 
 						String fileCreationDate = curFileList.getString(5);
-						Log.d("SyncAdapter -> uploadFilesToServer",
-								"fileCreationDate : " + fileCreationDate);
 
 						String fileGroupID = curFileList.getString(6);
-						Log.d("SyncAdapter -> uploadFilesToServer",
-								"fileGroupID : " + fileGroupID);
 
-						FileDetails fileDetails = new FileDetails(
-								Integer.parseInt(fileID), fileName, fileDesc,
-								filePath, fileOwner, fileCreationDate,
-								fileGroupID);
+						FileDetails fileDetails = new FileDetails(fileID,
+								fileName, fileDesc, filePath, fileOwner,
+								fileCreationDate, fileGroupID);
 
 						fileDetailsList.add(fileDetails);
 					} else {

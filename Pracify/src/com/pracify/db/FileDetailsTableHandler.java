@@ -24,6 +24,7 @@ public class FileDetailsTableHandler extends DatabaseHandler {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
+		values.put(COLUMN_TABLE_FILE_DETAILS_ID, fileDetails.getId());
 		values.put(COLUMN_TABLE_FILE_DETAILS_NAME, fileDetails.getName());
 		values.put(COLUMN_TABLE_FILE_DETAILS_DESC, fileDetails.getDesc());
 		values.put(COLUMN_TABLE_FILE_DETAILS_PATH, fileDetails.getPath());
@@ -59,7 +60,7 @@ public class FileDetailsTableHandler extends DatabaseHandler {
 		if (cursor != null) {
 			cursor.moveToFirst();
 
-			FileDetails fileDetails = new FileDetails(cursor.getInt(0),
+			FileDetails fileDetails = new FileDetails(cursor.getString(0),
 					cursor.getString(1), cursor.getString(2),
 					cursor.getString(3), cursor.getString(4),
 					cursor.getString(5), cursor.getString(6));
@@ -93,7 +94,7 @@ public class FileDetailsTableHandler extends DatabaseHandler {
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {
 			do {
-				FileDetails fileDetails = new FileDetails(cursor.getInt(0),
+				FileDetails fileDetails = new FileDetails(cursor.getString(0),
 						cursor.getString(1), cursor.getString(2),
 						cursor.getString(3), cursor.getString(4),
 						cursor.getString(5), cursor.getString(6));

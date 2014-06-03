@@ -25,6 +25,6 @@ public class PracifyConstants {
 			.getExternalStorageState().equals(
 					android.os.Environment.MEDIA_MOUNTED);
 	
-	public static String musicFileExtension = ".3gp";
+	public static String musicFileExtension = ".mp4";
 
 }

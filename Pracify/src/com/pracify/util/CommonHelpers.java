@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Random;
 
 import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
@@ -33,6 +34,17 @@ public class CommonHelpers {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
 				"dd-MM-yyyy_HH-mm-ss");
 		return dateFormat.format(cal.getTime());
+	}
+
+	public static int getRandomNumber(int digits) {
+
+		int min = (int) Math.pow(10, digits - 1);
+		int max = (int) (Math.pow(10, digits) - 1);
+
+		Random rand = new Random();
+		int randomNum = rand.nextInt((max - min) + 1) + min;
+
+		return randomNum;
 	}
 
 	public static String getOutputDir(Context activity) {

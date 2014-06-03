@@ -210,7 +210,7 @@ public class HomeActivity extends ActionBarActivity {
 			CommonHelpers.showLongToast(this, "Search Action");
 			return true;
 		case R.id.action_new:
-			Intent intent = new Intent(this, RecordingActivity.class);
+			Intent intent = new Intent(this, RecordingActivity_New.class);
 			startActivity(intent);
 			return true;
 		case R.id.action_refresh:

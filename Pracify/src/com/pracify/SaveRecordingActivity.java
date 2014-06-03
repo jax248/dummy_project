@@ -19,9 +19,7 @@ import com.pracify.util.CommonHelpers;
 import com.pracify.util.PracifyConstants;
 
 public class SaveRecordingActivity extends ActionBarActivity {
-
-	private MediaPlayer myPlayer;
-	private Button startPlaying, stopPlay;
+	
 	private static final String LOG_TAG = "SaveRecording";
 	private String mFileName = null;
 
@@ -36,9 +34,6 @@ public class SaveRecordingActivity extends ActionBarActivity {
 
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-
-		startPlaying = (Button) findViewById(R.id.startPlay);
-		stopPlay = (Button) findViewById(R.id.stopPlay);
 
 		fileName = (EditText) findViewById(R.id.editText1);
 		fileDescription = (EditText) findViewById(R.id.editText2);
@@ -105,7 +100,7 @@ public class SaveRecordingActivity extends ActionBarActivity {
 			group = "DummyGroup";
 			path = fileDetails.getPath();
 			owner = fileDetails.getOwner();
-			int id = Integer.parseInt(fileDetails.getId());
+			String id = fileDetails.getId();
 
 			fileDetails = new FileDetails(id, name, description, path, owner,
 					group);
@@ -134,37 +129,13 @@ public class SaveRecordingActivity extends ActionBarActivity {
 	}
 
 	public void playRecording(View view) {
-		try {
-			myPlayer = new MediaPlayer();
-			myPlayer.setDataSource(mFileName);
-			myPlayer.setLooping(true);
-			myPlayer.prepare();
-			myPlayer.start();
-
-			startPlaying.setEnabled(false);
-			stopPlay.setEnabled(true);
-
-			CommonHelpers.showLongToast(this, "Start play the recording...");
-		} catch (Exception e) {
-			Log.e(LOG_TAG, e.getMessage());
-			e.printStackTrace();
-		}
+		Intent intent = new Intent(this, Visualize.class);
+		intent.putExtra(PracifyConstants.filePathIntent, mFileName);
+		intent.putExtra(PracifyConstants.fileID, "NULL");
+		startActivity(intent);
 	}
 
-	public void stopPlay(View view) {
-		try {
-			if (myPlayer != null) {
-				myPlayer.stop();
-				myPlayer.release();
-				myPlayer = null;
-				startPlaying.setEnabled(true);
-				stopPlay.setEnabled(false);
-				CommonHelpers.showLongToast(this,
-						"Stop playing the recording...");
-			}
-		} catch (Exception e) {
-			Log.e(LOG_TAG, e.getMessage());
-			e.printStackTrace();
-		}
+	public void cancelRecord(View view) {
+		finish();
 	}
 }

@@ -4,8 +4,7 @@ import com.pracify.util.CommonHelpers;
 
 public class FileDetails {
 
-	private String name, desc, path, owner, creation_date, group;
-	int id;
+	private String name, desc, path, owner, creation_date, group, id;
 
 	public FileDetails() {
 		// Do nothing
@@ -14,6 +13,8 @@ public class FileDetails {
 	public FileDetails(String name, String desc, String path, String owner,
 			String group) {
 
+		this.id = owner + "_" + CommonHelpers.getCurrentTimestamp() + "_"
+				+ CommonHelpers.getRandomNumber(4);
 		this.name = name;
 		this.desc = desc;
 		this.path = path;
@@ -22,7 +23,7 @@ public class FileDetails {
 		this.group = group;
 	}
 
-	public FileDetails(int id, String name, String desc, String path,
+	public FileDetails(String id, String name, String desc, String path,
 			String owner, String group) {
 
 		this.id = id;
@@ -34,7 +35,7 @@ public class FileDetails {
 		this.group = group;
 	}
 
-	public FileDetails(int id, String name, String desc, String path,
+	public FileDetails(String id, String name, String desc, String path,
 			String owner, String creation_date, String group) {
 
 		this.id = id;
@@ -87,10 +88,10 @@ public class FileDetails {
 	}
 
 	public String getId() {
-		return Integer.toString(id);
+		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
