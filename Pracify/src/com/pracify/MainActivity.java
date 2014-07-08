@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.pracify.authenticator.AccountAuthenticator;
+import com.pracify.contentprovider.FileDetailsContract;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -56,7 +58,7 @@ public class MainActivity extends ActionBarActivity {
 					LoginActivity.PARAM_AUTHTOKEN_TYPE);
 		} else {
 
-			if (allAccounts.length >= 1) {
+			if (allAccounts.length > 1) {
 
 				for (Account account : allAccounts) {
 
@@ -89,6 +91,8 @@ public class MainActivity extends ActionBarActivity {
 					final String authtoken = bnd
 							.getString(AccountManager.KEY_AUTHTOKEN);
 					if (authtoken != null) {
+						ContentResolver.setSyncAutomatically(mAccount,
+								FileDetailsContract.AUTHORITY, true);
 						startHomeActivity();
 					} else {
 						showMessage("Unable to Authenticate!!");

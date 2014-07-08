@@ -6,8 +6,11 @@ import java.util.List;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -33,6 +36,10 @@ import com.pracify.util.PracifyConstants;
 
 public class HomeActivity extends ActionBarActivity {
 
+	public static final String ACTION_FINISHED_SYNC = "com.pracify.ACTION_FINISHED_SYNC";
+	private static IntentFilter syncIntentFilter = new IntentFilter(
+			ACTION_FINISHED_SYNC);
+
 	ListView fileListView;
 	CustomAdapter adapter;
 	List<FileDetails> fileDetailsList;
@@ -43,11 +50,18 @@ public class HomeActivity extends ActionBarActivity {
 	private Account mAccount;
 
 	// Sync interval constants
-	public static final long MILLISECONDS_PER_SECOND = 1000L;
 	public static final long SECONDS_PER_MINUTE = 60L;
-	public static final long SYNC_INTERVAL_IN_MINUTES = 1L;
+	public static final long SYNC_INTERVAL_IN_MINUTES = 60L;
 	public static final long SYNC_INTERVAL = SYNC_INTERVAL_IN_MINUTES
-			* SECONDS_PER_MINUTE * MILLISECONDS_PER_SECOND;
+			* SECONDS_PER_MINUTE;
+
+	private BroadcastReceiver syncBroadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.d(LOG_TAG, "Sync Completed. Update List");
+			refereshList();
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -184,9 +198,21 @@ public class HomeActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		registerReceiver(syncBroadcastReceiver, syncIntentFilter);
+		refereshList();
+	}
+
+	private void refereshList() {
+
 		setListData();
 		adapter = new CustomAdapter(this, CustomListViewValuesArr, mRes);
 		fileListView.setAdapter(adapter);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		unregisterReceiver(syncBroadcastReceiver);
 	}
 
 	@Override

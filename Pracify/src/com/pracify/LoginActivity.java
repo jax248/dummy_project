@@ -103,6 +103,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
 		boolean result = false;
 		try {
+			if (json != null) {
 			if (json.getBoolean("login")) {
 
 				mUsername = email_id;
@@ -121,9 +122,14 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 				result = true;
 			} else {
 
-				Log.d("Login", "Error login. Returning message");
+				Log.e("Login", "Error login. Returning message");
 
 				showHTMLError(json.getString("msg"));
+			}
+			}else{
+				Log.e("Login", "Error login. JSON Object is NULL");
+
+				showHTMLError("Some Error occurred! Please try again later....");
 			}
 		} catch (JSONException e) {
 
@@ -204,7 +210,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 		setAccountAuthenticatorResult(intent.getExtras());
 		setResult(RESULT_OK, intent);
 
-		Log.d(TAG, "Starting Login Activity");
+		Log.d(TAG, "Starting Home Activity");
 		intent = new Intent(this, HomeActivity.class);
 		startActivity(intent);
 

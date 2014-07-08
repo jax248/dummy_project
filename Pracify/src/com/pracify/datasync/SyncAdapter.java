@@ -14,6 +14,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.pracify.HomeActivity;
 import com.pracify.LoginActivity;
 import com.pracify.R;
 import com.pracify.contentprovider.FileDetailsContract;
@@ -34,7 +36,6 @@ import com.pracify.util.PracifyConstants;
  * sync adapter framework.
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
-
 	// Global variables
 	// Define a variable to contain a content resolver instance
 	private final ContentResolver mContentResolver;
@@ -191,6 +192,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				Log.e("SyncAdapter -> onPerformSync",
 						"Authentication failure...");
 			}
+
+			getContext().sendBroadcast(
+					new Intent(HomeActivity.ACTION_FINISHED_SYNC));
 		} catch (Exception e) {
 
 			mBuilder = new NotificationCompat.Builder(context)
