@@ -15,6 +15,9 @@ import com.pracify.util.PracifyConstants;
 public class RecordingActivity_New extends ActionBarActivity {
 
 	private static final String LOG_TAG = "Recording";
+	static final private double EMA_FILTER = 0.6;
+
+	private double mEMA = 0.0;
 	private String mFileName = null;
 
 	private MediaRecorder mRecorder = null;
@@ -64,5 +67,19 @@ public class RecordingActivity_New extends ActionBarActivity {
 		intent.putExtra(PracifyConstants.fileID, "NULL");
 		startActivity(intent);
 		finish();
+	}
+
+	public double getAmplitude() {
+		if (mRecorder != null)
+			return (mRecorder.getMaxAmplitude() / 2700.0);
+		else
+			return 0;
+
+	}
+
+	public double getAmplitudeEMA() {
+		double amp = getAmplitude();
+		mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
+		return mEMA;
 	}
 }

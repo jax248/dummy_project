@@ -29,7 +29,7 @@
             android:exported="true"
             android:process=":sync" >
             <intent-filter>
-com.pracify.contentprovider
+com.pracify.contentprovider
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
 
@@ -60,6 +60,9 @@ com.pracify.contentprovider
         <activity
             android:name="com.pracify.HomeActivity"
             android:label="@string/title_activity_home" >
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name="com.pracify.RecordingActivity"

@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -19,6 +20,7 @@ import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,7 +61,7 @@ public class HomeActivity extends ActionBarActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.d(LOG_TAG, "Sync Completed. Update List");
-			refereshList();
+			refereshList(null);
 		}
 	};
 
@@ -73,7 +75,7 @@ public class HomeActivity extends ActionBarActivity {
 		mAccount = am.getAccountsByType(AccountAuthenticator.ACCOUNT_TYPE)[0];
 
 		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
-		setListData();
+		setListData(null);
 
 		fileListView = (ListView) findViewById(R.id.listView);
 
@@ -161,14 +163,14 @@ public class HomeActivity extends ActionBarActivity {
 	}
 
 	/****** Function to set data in ArrayList *************/
-	public void setListData() {
+	public void setListData(String fileName) {
 
 		CustomListViewValuesArr.clear();
 
 		FileDetailsTableHandler fileDetailsTableHandler = new FileDetailsTableHandler(
 				this);
 
-		fileDetailsList = fileDetailsTableHandler.getAllFileDetails();
+		fileDetailsList = fileDetailsTableHandler.getAllFileDetails(fileName);
 
 		for (FileDetails fileDetails : fileDetailsList) {
 
@@ -199,12 +201,12 @@ public class HomeActivity extends ActionBarActivity {
 	protected void onResume() {
 		super.onResume();
 		registerReceiver(syncBroadcastReceiver, syncIntentFilter);
-		refereshList();
+		refereshList(null);
 	}
 
-	private void refereshList() {
+	private void refereshList(String fileName) {
 
-		setListData();
+		setListData(fileName);
 		adapter = new CustomAdapter(this, CustomListViewValuesArr, mRes);
 		fileListView.setAdapter(adapter);
 	}
@@ -221,9 +223,38 @@ public class HomeActivity extends ActionBarActivity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.home, menu);
 
+		// Associate searchable configuration with the SearchView
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
 		MenuItem searchItem = menu.findItem(R.id.action_search);
 		SearchView searchView = (SearchView) MenuItemCompat
 				.getActionView(searchItem);
+
+		searchView.setSearchableInfo(searchManager
+				.getSearchableInfo(getComponentName()));
+		searchView.setQueryHint(getString(R.string.search_hint));
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+
+			@Override
+			public boolean onQueryTextChange(String query) {
+
+				Log.d(LOG_TAG, "Search Query onQueryTextChange : " + query);
+				refereshList(query);
+
+				return true;
+
+			}
+
+			@Override
+			public boolean onQueryTextSubmit(String arg0) {
+
+				Log.d(LOG_TAG, "Search Query onQueryTextSubmit : " + arg0);
+				refereshList(arg0);
+
+				return true;
+			}
+
+		});
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -232,9 +263,6 @@ public class HomeActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
-		case R.id.action_search:
-			CommonHelpers.showLongToast(this, "Search Action");
-			return true;
 		case R.id.action_new:
 			Intent intent = new Intent(this, RecordingActivity_New.class);
 			startActivity(intent);

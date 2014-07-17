@@ -83,10 +83,20 @@ public class FileDetailsTableHandler extends DatabaseHandler {
 		}
 	}
 
-	public List<FileDetails> getAllFileDetails() {
+	public List<FileDetails> getAllFileDetails(String fileName) {
 		List<FileDetails> fileDetailsList = new ArrayList<FileDetails>();
 		// Select All Query
-		String selectQuery = "SELECT  * FROM " + TABLE_FILE_DETAILS;
+		String selectQuery;
+
+		if (fileName != null) {
+
+			selectQuery = "SELECT  * FROM " + TABLE_FILE_DETAILS + " WHERE "
+					+ COLUMN_TABLE_FILE_DETAILS_NAME + " LIKE '%" + fileName
+					+ "%'";
+		} else {
+
+			selectQuery = "SELECT  * FROM " + TABLE_FILE_DETAILS;
+		}
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
