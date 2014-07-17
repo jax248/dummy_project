@@ -32,8 +32,13 @@ public class CommonHelpers {
 
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"dd-MM-yyyy_HH-mm-ss");
-		return dateFormat.format(cal.getTime());
+				"dd MMM, yyyy_HH:mm:ss");
+		String returnDate = dateFormat.format(cal.getTime());
+
+		returnDate = returnDate.replace("_", " at ");
+		Log.d(LOG_TAG, "Return Date : " + returnDate);
+
+		return returnDate;
 	}
 
 	public static int getRandomNumber(int digits) {
